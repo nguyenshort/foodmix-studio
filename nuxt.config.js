@@ -69,22 +69,26 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'ant-design-vue/dist/antd.css'
+    { src: '~/assets/theme.less', lang: 'less' },
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/antd-ui'
+    '@/plugins/antd-ui',
+    { src: '~/plugins/axios.js', ssr: true },
+    { src: '~/plugins/cdn.js', ssr: true },
+    { src: '~/plugins/vue-cropperjs.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: [{ path: '~/components', pathPrefix: false }],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     ['@nuxtjs/dotenv', { filename: '.env' }],
+    '@nuxtjs/moment'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -95,10 +99,18 @@ export default {
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    'cookie-universal-nuxt',
+    'portal-vue/nuxt'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: process.env.BASE_URL
+  },
+
+  router: {
+    middleware: ['auth'],
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
@@ -107,11 +119,19 @@ export default {
     }
   },
 
+  moment: {
+    defaultLocale: 'vi',
+    locales: ['vi']
+  },
+
   // Content module configuration: https://go.nuxtjs.dev/config-content
   content: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend (config, { loaders: { less } }) {
+      less.javascriptEnabled = true
+    }
   },
 
   server: {
