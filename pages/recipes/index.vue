@@ -81,16 +81,6 @@
 
 export default {
   name: "RecipesPage",
-  async asyncData({ $axios }) {
-    try {
-      const { data } = await $axios.$get('/admin/recipe', { params: { order: 'createdAt', page: 0, limit: 10 } })
-      return {
-        recipes: data
-      }
-    } catch (e) {
-
-    }
-  },
   data() {
     return {
       columns: [
@@ -146,6 +136,7 @@ export default {
   },
   mounted() {
     this.getCount()
+    this.getRecipes(0)
   },
   methods: {
     async getCount() {

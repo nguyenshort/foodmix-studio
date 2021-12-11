@@ -13,9 +13,10 @@
           :model="form"
           :rules="rules"
         >
-          <p class="form-title">
-            Đăng Nhập
-          </p>
+          <div class="form-title">
+            <img src="/favicon/favicon-96x96.png"  alt="" width="40" />
+            <p>FoodMix</p>
+          </div>
           <a-form-model-item ref="email" prop="email" has-feedback>
             <a-input
               v-model="form.email"
@@ -23,15 +24,18 @@
               @blur="$refs.email.onFieldBlur()"
             />
           </a-form-model-item>
-          <a-form-model-item ref="password" prop="password" has-feedback>
+          <a-form-model-item ref="password" prop="password" has-feedback style="margin-bottom: 12">
             <a-input-password
               v-model="form.password"
               placeholder="Mật khẩu"
               @blur="$refs.password.onFieldBlur()"
             />
+            <template slot="extra">
+              <small>
+                TK: demo@foodmix.xyz | MK: 123456
+              </small>
+            </template>
           </a-form-model-item>
-        </a-form-model>
-        <a-form-model-item>
           <a-button
             type="primary"
             :icon="isLoading ? 'loading' : 'caret-right'"
@@ -40,7 +44,7 @@
           >
             Đăng Nhập
           </a-button>
-        </a-form-model-item>
+        </a-form-model>
       </div>
     </div>
   </div>
@@ -128,21 +132,31 @@ export default {
 }
 .login-form {
   width: 366px;
-  padding: 50px 40px 20px;
+  padding: 30px 40px 20px;
   background: #fff;
   border: 1px solid #e4e7ed;
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 6%);
   border-radius: 4px;
   margin: auto;
 }
+
+.login-form .ant-form-explain {
+  font-size: 12px;
+}
 .form-title {
   position: relative;
-  display: inline-block;
-  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
   width: 100%;
   text-align: center;
 }
-.login-form .ant-form-explain {
-  font-size: 12px;
+.form-title p {
+  margin-bottom: 0;
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #3b66f4;
 }
 </style>

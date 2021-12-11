@@ -10,7 +10,7 @@
           <a-icon type="appstore" />
           <span>Công Thức</span>
         </a-menu-item>
-        <a-menu-item v-if="['mod', 'admin'].includes(user.role)" key="2">
+        <a-menu-item v-if="['mod', 'admin'].includes(user.role)" key="2" @click="$router.push({ name: 'categories' })">
           <a-icon type="build" />
           <span>Thể Loại</span>
         </a-menu-item>
@@ -65,7 +65,10 @@ export default {
     ...mapGetters('pref', ['user'])
   },
   methods: {
-    async logOut () {}
+    logOut () {
+      this.$cookies.removeAll()
+      location.href = '/'
+    }
   }
 }
 </script>
@@ -106,12 +109,6 @@ export default {
 }
 .group-left {
   display: flex;
-}
-
-.site-logo {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
 }
 
 .site-logo p {

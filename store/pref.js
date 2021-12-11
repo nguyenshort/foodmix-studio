@@ -1,6 +1,6 @@
 export const state = () => ({
   /**
-   * @property { { name: String, avatar: String, email: String } } user
+   * @property { { name: String, avatar: String, email: String, role: String } } user
    */
   user: {}
 })
