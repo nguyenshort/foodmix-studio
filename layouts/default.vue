@@ -132,4 +132,9 @@ export default {
 .recipe-avatar:hover {
   cursor: pointer !important;
 }
+.site-logo {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
 </style>
