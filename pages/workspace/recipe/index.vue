@@ -339,7 +339,6 @@ export default {
         if (valid) {
           this.submitRecipe()
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
@@ -486,6 +485,7 @@ export default {
   border-radius: 8px;
   position: relative;
   display: block;
+  overflow: hidden;
 }
 
 .recipe-stepper {
