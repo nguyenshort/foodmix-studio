@@ -10,11 +10,11 @@
           <a-icon type="appstore" />
           <span>Công Thức</span>
         </a-menu-item>
-        <a-menu-item v-if="['mod', 'admin'].includes(user.role)" key="2" @click="$router.push({ name: 'categories' })">
+        <a-menu-item v-if="['mod', 'admin', 'sp_admin'].includes(user.role)" key="2" @click="$router.push({ name: 'categories' })">
           <a-icon type="build" />
           <span>Thể Loại</span>
         </a-menu-item>
-        <a-menu-item v-if="['mod', 'admin'].includes(user.role)" key="3">
+        <a-menu-item v-if="['mod', 'admin', 'sp_admin'].includes(user.role)" key="3" @click="$router.push({ name: 'users' })">
           <a-icon type="user" />
           <span>Thành Viên</span>
         </a-menu-item>

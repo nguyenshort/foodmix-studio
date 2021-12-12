@@ -58,8 +58,8 @@ export default {
   data () {
     return {
       form: {
-        email: '',
-        password: ''
+        email: 'demo@foodmix.xyz',
+        password: '123456'
       },
       isLoading: false,
       rules: {

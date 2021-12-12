@@ -18,8 +18,9 @@ export default function ({ $axios, redirect, $cookies, store }) {
     }
 
     const { code: errorCode, msg } = error.response.data
+    console.log(errorCode)
 
-    if(process.browser && errorCode === 2 && store.getters['pref/showNotify']) {
+    if(process.browser && errorCode === 2) {
 
       if(typeof msg === 'string') {
         window.$nuxt.$message.error(msg)
