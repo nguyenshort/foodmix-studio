@@ -14,55 +14,69 @@
 
       <span slot="action" slot-scope="text, record, index">
         <a-button type="primary" icon="edit" @click="showModal(index)">Sửa</a-button>
-        <a-popconfirm
-          title="Are you sure delete this task?"
-          ok-text="Yes"
-          cancel-text="No"
-          @confirm="(index) => {}"
-        >
-          <a-button type="danger" icon="delete" @click="showModal(index)">Xoá</a-button>
-        </a-popconfirm>
+        <a-button type="danger" icon="delete" @click="showDeleteOption(index)">Xoá</a-button>
       </span>
 
     </a-table>
 
     <a-modal v-model="visible" title="Sửa Phân Loại" ok-text="Cập Nhật" cancel-text="Huỷ" :width="800" @ok="handleOk">
-      <a-form-model :model="category" layout="vertical">
-        <a-row>
-          <a-col :span="13">
-            <a-form-model-item label="Tên" prop="name">
-              <a-input v-model="category.name" placeholder="Tên phân loại"/>
-            </a-form-model-item>
-            <a-form-model-item label="Mô tả" prop="content">
-              <a-textarea v-model="category.content" placeholder="Tên phân loại" :rows="5"/>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="10" :offset="1">
-            <a-form-model-item label="Ảnh Đại Diện" prop="avatar">
-              <a-spin :spinning="isUploadingAvatar">
-                <div class="category-avatar" style="width: 300px; height: 160px" @click="$refs.inputAvatar.click()">
-                  <img v-if="category.avatar" width="300" height="160" style="object-fit: cover" :src=" previewImage || $CDN(category.avatar)" alt=""/>
-                </div>
-              </a-spin>
-              <input ref="inputAvatar" type="file" accept='image/*' style="display: none" @change="uploadAvatar($event)" />
-              <div style="margin-top: 10px">
-                <a-button type="primary" icon="upload" :disabled="isUploadingAvatar" @click="$refs.inputAvatar.click()">
-                  Tải Lên
-                </a-button>
-
-                <a-button type="danger" icon="delete" :disabled="isUploadingAvatar" @click="category.avatar = ''">
-                  Xoá
-                </a-button>
+    <a-form-model :model="category" layout="vertical">
+      <a-row>
+        <a-col :span="13">
+          <a-form-model-item label="Tên" prop="name">
+            <a-input v-model="category.name" placeholder="Tên phân loại"/>
+          </a-form-model-item>
+          <a-form-model-item label="Mô tả" prop="content">
+            <a-textarea v-model="category.content" placeholder="Tên phân loại" :rows="5"/>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="10" :offset="1">
+          <a-form-model-item label="Ảnh Đại Diện" prop="avatar">
+            <a-spin :spinning="isUploadingAvatar">
+              <div class="category-avatar" style="width: 300px; height: 160px" @click="$refs.inputAvatar.click()">
+                <img v-if="category.avatar" width="300" height="160" style="object-fit: cover" :src=" previewImage || $CDN(category.avatar)" alt=""/>
               </div>
-              <template slot="extra">
-                <small>
-                  - Nhấn để thêm ảnh mới.
-                </small>
-              </template>
-            </a-form-model-item>
-          </a-col>
-        </a-row>
-      </a-form-model>
+            </a-spin>
+            <input ref="inputAvatar" type="file" accept='image/*' style="display: none" @change="uploadAvatar($event)" />
+            <div style="margin-top: 10px">
+              <a-button type="primary" icon="upload" :disabled="isUploadingAvatar" @click="$refs.inputAvatar.click()">
+                Tải Lên
+              </a-button>
+
+              <a-button type="danger" icon="delete" :disabled="isUploadingAvatar" @click="category.avatar = ''">
+                Xoá
+              </a-button>
+            </div>
+            <template slot="extra">
+              <small>
+                - Nhấn để thêm ảnh mới.
+              </small>
+            </template>
+          </a-form-model-item>
+        </a-col>
+      </a-row>
+    </a-form-model>
+  </a-modal>
+
+    <a-modal v-model="visible2" title="Tuỳ Chọn Xoá" ok-text="Xoá" cancel-text="Huỷ" @ok="deleteCategory">
+      <a-form-model-item ref="newCategory" help="Hãy chọn phân loại mới">
+        <a-select v-model="newCategory" style="width: 100%" @change="validateNewcategory()">
+          <a-select-option
+            v-for="(category2, index) in categories.filter((e) => e.slug !== category.slug)"
+            :key="index"
+            :value="category2.slug"
+          >{{ category2.name }}</a-select-option>
+        </a-select>
+
+        <template slot="extra">
+          <small>
+            - Các món ăn sẽ cần phân loại mới.
+            <br />
+            - Hãy chọn phân loại mới!
+          </small>
+        </template>
+
+      </a-form-model-item>
     </a-modal>
 
   </div>
@@ -108,10 +122,12 @@ export default {
       isLoading: false,
       columns,
       visible: false,
+      visible2: false,
       category: {},
       currentIndex: '',
       isUploadingAvatar: false,
-      previewImage: ''
+      previewImage: '',
+      newCategory: ''
     }
   },
   mounted() {
@@ -133,6 +149,14 @@ export default {
       this.isLoading = false
     },
 
+    showDeleteOption(index) {
+      if(this.categories.length <= 1) {
+        return this.$message.warn('Phải có ít nhất 1 phân loại')
+      }
+      this.currentIndex = index
+      this.category = Object.assign({}, this.categories[index])
+      this.visible2 = true;
+    },
     async handleOk() {
 
       this.visible = false
@@ -162,6 +186,26 @@ export default {
       }
       this.previewImage = ''
       this.isUploadingAvatar = false
+    },
+
+    validateNewcategory() {
+      this.$refs.newCategory.validateState = this.newCategory ? 'success' : 'error'
+    },
+
+    async deleteCategory() {
+      this.validateNewcategory()
+      if(this.newCategory) {
+        this.visible2 = false
+        this.isLoading = true
+        try {
+          await this.$axios.$delete('/admin/category/' + this.category.slug, { params: { newCategory: this.newCategory } })
+          this.$delete(this.categories, this.currentIndex)
+          this.category = {}
+          this.currentIndex = ''
+          this.newCategory = ''
+        } catch (e) {}
+        this.isLoading = false
+      }
     }
   }
 }

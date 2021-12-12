@@ -44,7 +44,7 @@
           }
         })">Sửa</a-button>
         <a-popconfirm
-          title="Are you sure delete this task?"
+          title="Bạn có chắc muốn xoá công thức này?"
           ok-text="Yes"
           cancel-text="No"
           @confirm="deleteRecipe(record.slug, index)"

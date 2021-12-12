@@ -22,10 +22,10 @@ export default function ({ $axios, redirect, $cookies, store }) {
     if(process.browser && errorCode === 2 && store.getters['pref/showNotify']) {
 
       if(typeof msg === 'string') {
-        window.$nuxt.$emit('pushNotify', { msg, error: true })
+        window.$nuxt.$message.error(msg)
       } else if (Array.isArray(msg)) {
         // lỗi form
-        window.$nuxt.$emit('pushNotify', { msg: msg[0].msg, error: true })
+        window.$nuxt.$message.error(msg[0].msg)
       }
 
     }
